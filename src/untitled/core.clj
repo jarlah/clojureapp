@@ -29,10 +29,16 @@
     (println (str "Request failed with status code " (:status response) ": " + (:body response)))))
 
 (defn -main [& [datasource region-id order-type page]]
-  (some-> (get-market-orders datasource region-id order-type page)
-          (handle-response)
-          (get-unique-type-ids)
-          (get-universe-objects datasource)
-          (handle-response)
-          (get-unique-object-names-sorted)
-          (println)))
+  (do
+    (println "Program start")
+    (let [names (some-> (get-market-orders datasource region-id order-type page)
+                        (handle-response)
+                        (get-unique-type-ids)
+                        (get-universe-objects datasource)
+                        (handle-response)
+                        (get-unique-object-names-sorted))]
+      (do
+        (run! println names)
+        (println (str "Found " (count names) " unique objects"))))
+    (println "Program end")))
+

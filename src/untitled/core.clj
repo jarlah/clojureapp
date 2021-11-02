@@ -14,8 +14,9 @@
 
 (defn get-universe-objects
   [type-ids datasource]
-  (let [url (str base-url "/universe/names?datasource=" datasource)]
-    (client/post url {:body (generate-string type-ids) :as :json :content-type :json :throw-exceptions false})))
+  (let [url (str base-url "/universe/names?datasource=" datasource)
+        body (generate-string type-ids)]
+    (client/post url {:body body :as :json :content-type :json :throw-exceptions false})))
 
 (defn get-unique-object-names-sorted [objects]
   (-> (map :name objects)

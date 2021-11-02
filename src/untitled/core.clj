@@ -22,16 +22,16 @@
       (distinct)
       (sort)))
 
-(defn handle_response [response]
+(defn handle-response [response]
   (if (== 200 (:status response))
     (:body response)
     (println (str "Request failed with status code " (:status response) ": " + (:body response)))))
 
 (defn -main []
   (some-> (get-market-orders 10000002)
-          (handle_response)
+          (handle-response)
           (get-unique-type-ids)
           (get-universe-objects)
-          (handle_response)
+          (handle-response)
           (get-unique-object-names-sorted)
           (println)))

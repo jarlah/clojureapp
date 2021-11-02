@@ -1,6 +1,7 @@
 (ns untitled.core
   (:require [clj-http.client :as client])
-  (:require [cheshire.core :refer :all]))
+  (:require [cheshire.core :refer :all])
+  (:gen-class))
 
 (def base-url "https://esi.evetech.net/latest")
 
@@ -37,8 +38,10 @@
                         (get-universe-objects datasource)
                         (handle-response)
                         (get-unique-object-names-sorted))]
-      (do
-        (run! println names)
-        (println (str "Found " (count names) " unique objects"))))
+      (if (some? names)
+        (do
+          (run! println names)
+          (println (str "Found " (count names) " unique objects")))
+        (println "Something failed")))
     (println "Program end")))
 

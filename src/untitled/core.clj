@@ -3,8 +3,8 @@
 (defn get-market-orders [region-id]
   (:body (client/get (str "https://esi.evetech.net/latest/markets/" region-id "/orders") {:accept :json :as :json})))
 
-(defn get-unique-type-ids [response]
-  (distinct (map :type_id response)))
+(defn get-unique-type-ids [orders]
+  (distinct (map :type_id orders)))
 
 (defn get-universe-objects
   [type-ids]

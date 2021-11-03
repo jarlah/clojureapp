@@ -17,4 +17,4 @@ jobs:
     - name: Build the Docker image
       run: |
       lein cljfmt check
-	  make
+      make

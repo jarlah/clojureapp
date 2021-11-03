@@ -4,5 +4,6 @@
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :main untitled.core
+  :plugins [[lein-cljfmt "0.8.0"]]
   :dependencies [[org.clojure/clojure "1.10.1"] [clj-http "3.12.3"] [cheshire "5.9.0"]]
   :repl-options {:init-ns untitled.core})

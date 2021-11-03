@@ -7,7 +7,9 @@
 
 (defn get-market-orders [datasource region-id order-type page]
   (let [url (str base-url "/markets/" region-id "/orders")
-        query-params {:datasource datasource :order_type order-type :page page}]
+        query-params {:datasource datasource
+                      :order_type order-type
+                      :page page}]
     (client/get url {:query-params     query-params
                      :accept           :json
                      :as               :json

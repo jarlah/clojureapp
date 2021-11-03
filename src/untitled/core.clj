@@ -6,12 +6,9 @@
 (def base-url "https://esi.evetech.net/latest")
 
 (defn get-market-orders [datasource region-id order-type page]
-  (let [url (str base-url "/markets/" region-id "/orders")]
-    (client/get url {:query-params     {
-                                        :datasource datasource
-                                        :order_type order-type
-                                        :page       page
-                                        }
+  (let [url (str base-url "/markets/" region-id "/orders")
+        query-params {:datasource datasource :order_type order-type :page page}]
+    (client/get url {:query-params     query-params
                      :accept           :json
                      :as               :json
                      :throw-exceptions false})))
@@ -23,10 +20,9 @@
 (defn get-universe-objects
   [type-ids datasource]
   (let [url (str base-url "/universe/names")
-        body (generate-string type-ids)]
-    (client/post url {:query-params     {
-                                         :datasource datasource
-                                         }
+        body (generate-string type-ids)
+        query-params {:datasource datasource}]
+    (client/post url {:query-params     query-params
                       :body             body
                       :as               :json
                       :content-type     :json

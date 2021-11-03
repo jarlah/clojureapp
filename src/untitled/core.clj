@@ -6,8 +6,15 @@
 (def base-url "https://esi.evetech.net/latest")
 
 (defn get-market-orders [datasource region-id order-type page]
-  (let [url (str base-url "/markets/" region-id "/orders/?datasource=" datasource "&order_type" order-type "&page=" page)]
-    (client/get url {:accept :json :as :json :throw-exceptions false})))
+  (let [url (str base-url "/markets/" region-id "/orders")]
+    (client/get url {:query-params     {
+                                        :datasource datasource
+                                        :order_type order-type
+                                        :page       page
+                                        }
+                     :accept           :json
+                     :as               :json
+                     :throw-exceptions false})))
 
 (defn get-unique-type-ids [orders]
   (-> (map :type_id orders)
@@ -15,9 +22,15 @@
 
 (defn get-universe-objects
   [type-ids datasource]
-  (let [url (str base-url "/universe/names?datasource=" datasource)
+  (let [url (str base-url "/universe/names")
         body (generate-string type-ids)]
-    (client/post url {:body body :as :json :content-type :json :throw-exceptions false})))
+    (client/post url {:query-params     {
+                                         :datasource datasource
+                                         }
+                      :body             body
+                      :as               :json
+                      :content-type     :json
+                      :throw-exceptions false})))
 
 (defn get-unique-object-names-sorted [objects]
   (-> (map :name objects)
@@ -29,15 +42,18 @@
     (:body response)
     (println (str "Request failed with status code " (:status response) ": " + (:body response)))))
 
+(defn get-names [datasource region-id order-type page]
+  (some-> (get-market-orders datasource region-id order-type page)
+          (handle-response)
+          (get-unique-type-ids)
+          (get-universe-objects datasource)
+          (handle-response)
+          (get-unique-object-names-sorted)))
+
 (defn -main [& [datasource region-id order-type page]]
   (do
     (println "Program start")
-    (let [names (some-> (get-market-orders datasource region-id order-type page)
-                        (handle-response)
-                        (get-unique-type-ids)
-                        (get-universe-objects datasource)
-                        (handle-response)
-                        (get-unique-object-names-sorted))]
+    (let [names (get-names datasource region-id order-type page)]
       (if (some? names)
         (do
           (run! println names)

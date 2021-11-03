@@ -14,7 +14,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Check clojure formatting
+    - run: lein cljfmt check
     - name: Build the Docker image
-    - run: |
-      lein cljfmt check
-      make
+    - run: make
